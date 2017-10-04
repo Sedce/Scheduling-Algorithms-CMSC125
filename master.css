@@ -1,0 +1,23 @@
+
+.tables{
+  border-collapse: collapse;
+
+}
+.tables th{
+
+          border-style: solid;
+          border-radius: 1px;
+          border-color: black;
+}
+.tables td{
+
+          border-style: solid;
+          border-radius: 1px;
+          border-color: black;
+}
+.algo {
+  float: left;
+  margin-left: 20px;
+  margin-right: 20px;
+
+}
