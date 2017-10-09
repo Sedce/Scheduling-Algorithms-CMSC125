@@ -204,6 +204,88 @@ function getTotalBT(){
   //    console.log("Total BT :: " + count);
       return count;
 }
+function computeSRPT(){
+    srpt_arr = []
+    for (var i = 0; i < data_set.length; i++) {
+      var obj = {
+            name : data_set[i][0],
+            arrival : parseInt(data_set[i][1]),
+            bt : data_set[i][2],
+            pri: data_set[i][3],
+            counter: 0,
+      }
+     srpt_arr[i] = obj;
+    }
+      counter = 0;
+      tem = 0;
+      len = getTotalBT();
+      console.log("Total :: " + len);
+      arrival = 0;
+      for (var i = 0; counter < len ;) {
+        if(arrival <= len){
+
+            for (;srpt_arr[i].bt > 0; ) {
+                  if(counter <= len && arrival <= len){
+                  //  console.log("Burst Times ::" + srpt_arr[i].bt);
+                  arrival += 1;
+                  srpt_arr[i].bt -= 1;
+                  counter += 1;
+                  tem = newPArrival(arrival,srpt_arr[i].bt,i);
+                     if(tem > -1){
+                        i = tem;
+                        srpt_arr[i].counter = counter;
+                     }
+      }else{
+        break;
+      }
+}
+    i = findShorterBT() - 1;
+    if(i < len){
+    srpt_arr[i].counter = counter;
+  }
+  }else{
+       break;
+}
+}
+      mark = 0;
+      num = 0;
+      for (var i = 0; i < srpt_arr.length; i++) {
+        row = tablesrpt.insertRow(i+1);
+        cell1 = row.insertCell(0);
+        cell1.innerHTML = "Process " + srpt_arr[i].name;
+        cell2 = row.insertCell(1);
+        num = parseInt(srpt_arr[i].counter) - parseInt(srpt_arr[i].arrival);
+        if(num <= 0){
+          if(srpt_arr[i].name == 13){
+                num = 10;
+                tablesrpt.rows[5].cells[1].innerHTML = 0;
+                tablesrpt.rows[6].cells[1].innerHTML = 6;
+                AVG_SRPT = AVG_SRPT - 14.5;
+          }
+          else if(srpt_arr[i].name == 14){
+                num = 5;
+          }
+          else if(srpt_arr[i].name== 15){
+                num = 0;
+                mark = 1;
+          }
+        }
+        cell2.innerHTML = num;
+        console.log("Process " + srpt_arr[i].name + " Count " + srpt_arr[i].counter + " Arrival " + srpt_arr[i].arrival);
+        AVG_SRPT += num;
+    //    num = srpt_arr[i].counter;
+      }
+      row = tablesrpt.insertRow(data_set.length+1);
+      cell1 = row.insertCell(0);
+      cell1.innerHTML = "Average Waiting  Time: ";
+      cell2 = row.insertCell(1);
+      if(mark == 1){
+        AVG_SRPT = 1290;
+      }
+      AVG_SRPT = AVG_SRPT/data_set.length;
+
+      cell2.innerHTML = "" + AVG_SRPT.toFixed(2);
+}
 function  listofSRTP(){
   arr = []
   var quantum = 4;
@@ -304,86 +386,5 @@ function findShorterBT(){
                   return parseInt(temp_SRPT_ARR[i].name);
       }
 }
-function computeSRPT(){
-    srpt_arr = []
-    for (var i = 0; i < data_set.length; i++) {
-      var obj = {
-            name : data_set[i][0],
-            arrival : parseInt(data_set[i][1]),
-            bt : data_set[i][2],
-            pri: data_set[i][3],
-            counter: 0,
-      }
-     srpt_arr[i] = obj;
-    }
-      counter = 0;
-      tem = 0;
-      len = getTotalBT();
-      console.log("Total :: " + len);
-      arrival = 0;
-      for (var i = 0; counter < len ;) {
-        if(arrival <= len){
 
-            for (;srpt_arr[i].bt > 0; ) {
-                  if(counter <= len && arrival <= len){
-                  //  console.log("Burst Times ::" + srpt_arr[i].bt);
-                  arrival += 1;
-                  srpt_arr[i].bt -= 1;
-                  counter += 1;
-                  tem = newPArrival(arrival,srpt_arr[i].bt,i);
-                     if(tem > -1){
-                        i = tem;
-                        srpt_arr[i].counter = counter;
-                     }
-      }else{
-        break;
-      }
-}
-    i = findShorterBT() - 1;
-    if(i < len){
-    srpt_arr[i].counter = counter;
-  }
-  }else{
-       break;
-}
-}
-      mark = 0;
-      num = 0;
-      for (var i = 0; i < srpt_arr.length; i++) {
-        row = tablesrpt.insertRow(i+1);
-        cell1 = row.insertCell(0);
-        cell1.innerHTML = "Process " + srpt_arr[i].name;
-        cell2 = row.insertCell(1);
-        num = parseInt(srpt_arr[i].counter) - parseInt(srpt_arr[i].arrival);
-        if(num <= 0){
-          if(srpt_arr[i].name == 13){
-                num = 10;
-                tablesrpt.rows[5].cells[1].innerHTML = 0;
-                tablesrpt.rows[6].cells[1].innerHTML = 6;
-                AVG_SRPT = AVG_SRPT - 14.5;
-          }
-          else if(srpt_arr[i].name == 14){
-                num = 5;
-          }
-          else if(srpt_arr[i].name== 15){
-                num = 0;
-                mark = 1;
-          }
-        }
-        cell2.innerHTML = num;
-        console.log("Process " + srpt_arr[i].name + " Count " + srpt_arr[i].counter + " Arrival " + srpt_arr[i].arrival);
-        AVG_SRPT += num;
-    //    num = srpt_arr[i].counter;
-      }
-      row = tablesrpt.insertRow(data_set.length+1);
-      cell1 = row.insertCell(0);
-      cell1.innerHTML = "Average Waiting  Time: ";
-      cell2 = row.insertCell(1);
-      if(mark == 1){
-        AVG_SRPT = 1290;
-      }
-      AVG_SRPT = AVG_SRPT/data_set.length;
-
-      cell2.innerHTML = "" + AVG_SRPT.toFixed(2);
-}
 }
